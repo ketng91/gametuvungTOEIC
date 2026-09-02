@@ -8,7 +8,7 @@
 <style>
 body {
  margin: 0;
-  background-image: url("backC.jpg");
+  background-image: url("backC.png");
   background-size: cover;        /* phủ full màn hình */
   background-position: center 30%;   /* căn giữa */
   background-repeat: no-repeat;
@@ -96,6 +96,14 @@ button.game-btn {
   gap: 10px;
 }
 
+#speedDisplay {
+  font-size: clamp(14px, 4vw, 18px);
+  font-weight: bold;
+  color: #D73535;
+  min-width: 45px;
+  text-align: center;
+  align-self: center;
+}
 
 button.game-btn:hover {
   background-color: #ffb3ba;
@@ -133,14 +141,18 @@ button.game-btn:hover {
 
 <div id="wordBox">
   <div id="word"></div>
-  <div id="tagline">Lớp Anh thầy Kết: KG onl/off Đà Nẵng các khoá Khoá Tổng ôn THPTQG, Anh vào 10, Lớp TOEIC 2-4 skills</div>
+  <div id="tagline">Lớp Anh thầy Kết</div>
 </div>
 
 <div id="inputContainer">
     <input id="input" placeholder="Gõ rồi nhấn Enter…" autofocus />
-   <div id="buttonsRow">
+   
+<div id="buttonsRow">
     <button id="showAnswerBtn" class="game-btn">Đáp án</button>
     <button id="nextWordBtn" class="game-btn">Next</button>
+    <button id="slowBtn" class="game-btn">SPEED −</button>
+    <span id="speedDisplay">1.0</span>
+    <button id="fastBtn" class="game-btn">SPEED +</button>
 </div>
 
 
@@ -1581,7 +1593,10 @@ let shuffledWords = [];
 let current = null;
 let score = 0;
 let y = 0;
-const speed = 0.3;
+let speed = 1.0;
+const minSpeed = 0.2;
+const maxSpeed = 5.0;
+
 
 function shuffleWords() {
   shuffledWords = [...words];
@@ -1632,6 +1647,28 @@ document.getElementById("showAnswerBtn").addEventListener("click", () =>{
   document.getElementById("input").value = current[1];
 });
 document.getElementById("nextWordBtn").addEventListener("click", newWord);
+
+/* ====== ĐIỀU CHỈNH SPEED ====== */
+
+const speedDisplay = document.getElementById("speedDisplay");
+
+function updateSpeedDisplay() {
+  speedDisplay.textContent = speed.toFixed(1);
+}
+
+// SPEED CHẬM
+document.getElementById("slowBtn").addEventListener("click", () => {
+  speed = Math.max(minSpeed, speed - 0.2);
+  updateSpeedDisplay();
+});
+
+// SPEED NHANH
+document.getElementById("fastBtn").addEventListener("click", () => {
+  speed = Math.min(maxSpeed, speed + 0.2);
+  updateSpeedDisplay();
+});
+
+updateSpeedDisplay();
 
 function celebrate() {
   for (let i = 0; i < 35; i++) {
