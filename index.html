@@ -468,6 +468,27 @@ body {
             Next
         </button>
 
+        <button
+            id="slowerBtn"
+            class="game-btn"
+        >
+            🐢 Chậm
+        </button>
+
+        <button
+            id="fasterBtn"
+            class="game-btn"
+        >
+            🐇 Nhanh
+        </button>
+
+        <span
+            id="speedDisplay"
+            style="font-size: clamp(13px, 3.5vw, 16px); font-weight: bold; color: #7a4e3e; align-self: center;"
+        >
+            Speed: 1.3
+        </span>
+
     </div>
 
 </div>
@@ -870,7 +891,10 @@ const words = [
     Tốc độ KHÔNG tự thay đổi.
 */
 
-const SPEED = 1.3;
+let SPEED = 1.3;
+const MIN_SPEED = 0.5;
+const MAX_SPEED = 2.0;
+const SPEED_STEP = 0.1;
 
 
 /*
@@ -905,6 +929,15 @@ const showAnswerButton =
 
 const nextButton =
     document.getElementById("nextWordBtn");
+
+const slowerButton =
+    document.getElementById("slowerBtn");
+
+const fasterButton =
+    document.getElementById("fasterBtn");
+
+const speedDisplay =
+    document.getElementById("speedDisplay");
 
 
 
@@ -1402,6 +1435,46 @@ nextButton.addEventListener(
     }
 );
 
+
+
+/* =====================================================
+   SPEED CONTROLS
+===================================================== */
+
+function updateSpeedDisplay() {
+    speedDisplay.textContent =
+        "Speed: " + SPEED.toFixed(1);
+}
+
+slowerButton.addEventListener(
+    "click",
+    function() {
+        activateAudio();
+
+        SPEED = Math.max(
+            MIN_SPEED,
+            Math.round((SPEED - SPEED_STEP) * 10) / 10
+        );
+
+        updateSpeedDisplay();
+    }
+);
+
+fasterButton.addEventListener(
+    "click",
+    function() {
+        activateAudio();
+
+        SPEED = Math.min(
+            MAX_SPEED,
+            Math.round((SPEED + SPEED_STEP) * 10) / 10
+        );
+
+        updateSpeedDisplay();
+    }
+);
+
+updateSpeedDisplay();
 
 
 /* =====================================================
@@ -2025,4 +2098,3 @@ startGameLoop();
 </body>
 
 </html>
-```
